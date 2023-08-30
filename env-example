@@ -1,0 +1,6 @@
+APP_NAME="Intelieye"
+APP_HOST="http://localhost"
+DB_HOST=localhost
+DB_USER=sarif
+DB_PASSWORD=sarif115
+DB_NAME=db_intelieye
