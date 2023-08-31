@@ -29,10 +29,10 @@ class Sentences(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sentence = db.Column(db.String(255))
     read = db.Column(db.Integer)
-    content = db.Column(db.Integer)
-    category = db.Column(db.Integer)
+    content = db.Column(db.Integer, default=2)
+    category = db.Column(db.Integer, default=2)
 
-@app.route('/sentences', methods=['POST', 'GET'])
+@app.route('/sentences', methods=['POST', 'GET', 'DELETE'])
 def cr_sentences():
     if request.method == 'POST':
         data = request.json
@@ -62,6 +62,11 @@ def cr_sentences():
                     {'1': [cay.sentence for cay in category_yes]}
                 ],})
     
+    if request.method == 'DELETE':
+        db.session.query(Sentences).delete()
+        db.session.commit()
+        return jsonify({'message': 'All Sentence deleted successfully'})
+
 @app.route('/sentences/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def ud_sentences(id):
     sentence = Sentences.query.get(id)
