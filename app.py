@@ -32,6 +32,11 @@ class Sentences(db.Model):
     content = db.Column(db.Integer, default=2)
     category = db.Column(db.Integer, default=2)
 
+class Predicts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sentence = db.Column(db.String(255))
+    result = db.Column(db.String(255))
+
 @app.route('/sentences', methods=['POST', 'GET', 'DELETE'])
 def cr_sentences():
     if request.method == 'POST':
@@ -219,6 +224,44 @@ def train():
         summary = train_model()
         return jsonify({"result": summary})
 
+@app.route('/predicts', methods=['GET', 'POST'])
+def manage_predicts():
+    if request.method == 'GET':
+        predicts = Predicts.query.all()
+        return jsonify({"data":[{'sentence': c.sentence, 'result': c.result} for c in predicts]})
+    
+    if request.method == 'POST':
+        data = request.json
+        user_input = data['sentence']
+        cleanKata = [''.join(clean_and_lower(kalimat) for kalimat in user_input)]
+        bisa_dibaca_vector = get_avg_word_vectors(cleanKata, dibaca_bin_model)
+        bisa_dibaca_prediksi = dibaca_h5_model.predict(bisa_dibaca_vector)
+        bisa = True if bisa_dibaca_prediksi[0]>=0.5 else False
+        print("Bisa Dibaca :", bisa_dibaca_prediksi)
+
+        if bisa :
+            tema_mata_vector = get_avg_word_vectors(cleanKata, mata_bin_model)
+            tema_mata_prediksi = mata_h5_model.predict(tema_mata_vector)
+            mata = True if tema_mata_prediksi[0]>=0.5 else False
+            print("Tema Mata :", tema_mata_prediksi)
+
+            if mata :
+                mitos_fakta_vectors = get_avg_word_vectors(cleanKata, w2v_bin_model)
+                predictions = w2v_h5_model.predict(mitos_fakta_vectors)
+                hasil = "Fakta" if predictions[0]>=0.5 else "Mitos"
+                print("Fakta Mitos :", predictions)
+
+            else :
+                hasil = "Bukan tentang mata"
+
+        else :
+            hasil = "Inputan Sementara Tidak Dikenal"
+
+        new_predict = Predicts(sentence=data['sentence'], result=hasil)
+        db.session.add(new_predict)
+        db.session.commit()
+
+        return jsonify({'result': hasil})
 
 @app.route('/')
 def hello():
