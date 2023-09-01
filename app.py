@@ -110,7 +110,7 @@ w2v_h5_model = load_model("model/w2v.h5")
 w2v_bin_model = gensim.models.Word2Vec.load("model/w2v.bin")
 
 def train_model():
-    url = "http://127.0.0.1:5000/sentences"
+    url = "http://api.intelieye.my.id/sentences"
     summary = []
     response = requests.get(url)
     data = response.json()
@@ -130,13 +130,13 @@ def train_model():
         cleanData = [(clean_and_lower(kalimat), label) for kalimat, label in trainData]
         sentences = [data for data, label in cleanData]
         labels = [label for data, label in cleanData]
-        X_train, X_test, y_train, y_test = train_test_split(sentences, labels, test_size=0.3, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(sentences, labels, test_size=0.25, random_state=42)
         word2vec = word2vec_model(X_train) # ajarin model sentence word2vec
         X_train_avg = get_avg_word_vectors(X_train, word2vec)
         X_test_avg = get_avg_word_vectors(X_test,word2vec)
         if i == 0:
             model = build_model_read(input_dim=X_train_avg.shape[1])
-            result = model.fit(X_train_avg, np.array(y_train), batch_size=5, epochs=25, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
+            result = model.fit(X_train_avg, np.array(y_train), epochs=4, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
             summary.append({'read' : [result.history['loss'][-1],
                                       result.history['accuracy'][-1],
                                       result.history['val_loss'][-1],
@@ -145,7 +145,7 @@ def train_model():
             word2vec.save("model/bisaDibaca.bin")
         if i == 1:
             model = build_model_content(input_dim=X_train_avg.shape[1])
-            result = model.fit(X_train_avg, np.array(y_train), batch_size=5, epochs=20, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
+            result = model.fit(X_train_avg, np.array(y_train), epochs=100, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
             summary.append({'content' : [result.history['loss'][-1],
                                          result.history['accuracy'][-1],
                                          result.history['val_loss'][-1],
@@ -154,7 +154,7 @@ def train_model():
             word2vec.save("model/temaMata.bin")
         if i == 2:
             model = build_model_category(input_dim=X_train_avg.shape[1])
-            result = model.fit(X_train_avg, np.array(y_train), batch_size=3, epochs=20, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
+            result = model.fit(X_train_avg, np.array(y_train), epochs=200, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
             summary.append({'category' : [result.history['loss'][-1],
                                           result.history['accuracy'][-1],
                                           result.history['val_loss'][-1],
@@ -165,40 +165,55 @@ def train_model():
 
 def build_model_read(input_dim):
     model = Sequential()
-    model.add(Dense(128, input_dim=input_dim, activation='relu'))
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(32, input_dim=input_dim, activation='relu'))
     model.add(Dense(32, activation='relu'))
-    model.add(Dense(16, activation='relu'))
-    model.add(Dense(16, activation='relu'))
     model.add(Dense(32, activation='relu'))
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer='adamax', metrics=['accuracy'])
     return model
 
 def build_model_content(input_dim):
     model = Sequential()
     model.add(Dense(128, input_dim=input_dim, activation='relu'))
-    model.add(Dense(64, activation='relu'))
-    model.add(Dense(64, activation='relu'))
-    model.add(Dense(64, activation='relu'))
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer='adamax', metrics=['accuracy'])
     return model
 
 def build_model_category(input_dim):
     model = Sequential()
     model.add(Dense(256, input_dim=input_dim, activation='relu'))
-    model.add(Dense(128, activation='relu'))
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer='adamax', metrics=['accuracy'])
     return model
 
 def clean_and_lower(text):
+    stopword = ["akan", "dapat", "dan", "dengan", "dari", "itu", "ini", "saya", "kamu", "dia", "mereka", "aku", "di", "ke", "hanya", "dalam", "secara", "ada", "pada"]
     cleaned_text = ''.join(char.lower() for char in text if char.isalnum() or char.isspace())
-    return cleaned_text
+    splittedWord = cleaned_text.split() 
+    filtered_words = [word for word in splittedWord if word not in stopword]  
+    filtered_sentence = ' '.join(filtered_words)
+    return filtered_sentence
 
 def word2vec_model(sentences):
     words = [sentence.split() for sentence in sentences]
