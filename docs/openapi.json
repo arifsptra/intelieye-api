@@ -1,0 +1,385 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Intelieye",
+    "contact": {},
+    "version": "1.0"
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "servers": [
+    {
+      "url": "http://43.218.145.196:5000",
+      "variables": {}
+    },
+    {
+      "url": "http://127.0.0.1:5000",
+      "variables": {}
+    }
+  ],
+  "paths": {
+    "/sentences": {
+      "get": {
+        "tags": ["Misc"],
+        "summary": "Get All Sentence",
+        "operationId": "GetAllSentence",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Misc"],
+        "summary": "Create Sentence",
+        "operationId": "CreateSentence",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CreateSentenceRequest"
+                  },
+                  {
+                    "examples": [
+                      {
+                        "sentence": "Read 1 Content 2",
+                        "read": 1,
+                        "content": 1,
+                        "category": 1
+                      }
+                    ]
+                  }
+                ],
+                "contentMediaType": "application/json"
+              },
+              "example": {
+                "sentence": "Read 1 Content 2",
+                "read": 1,
+                "content": 1,
+                "category": 1
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Misc"],
+        "summary": "Delete All Sentence",
+        "operationId": "DeleteAllSentence",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/sentences/100": {
+      "get": {
+        "tags": ["Misc"],
+        "summary": "Get Sentence by Id",
+        "operationId": "GetSentencebyId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/3": {
+      "put": {
+        "tags": ["Misc"],
+        "summary": "Update Sentence by Id",
+        "operationId": "UpdateSentencebyId",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateSentencebyIdRequest"
+                  },
+                  {
+                    "examples": [
+                      {
+                        "sentence": "coba 10",
+                        "read": 1,
+                        "content": 1,
+                        "category": 0
+                      }
+                    ]
+                  }
+                ],
+                "contentMediaType": "application/json"
+              },
+              "example": {
+                "sentence": "coba 10",
+                "read": 1,
+                "content": 1,
+                "category": 0
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "http://127.0.0.1:5000/sentences",
+            "variables": {}
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/sentences/1": {
+      "delete": {
+        "tags": ["Misc"],
+        "summary": "Delete Sentence by Id",
+        "operationId": "DeleteSentencebyId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/predicts": {
+      "post": {
+        "tags": ["Misc"],
+        "summary": "Predict Sentence",
+        "operationId": "PredictSentence",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PredictSentenceRequest"
+                  },
+                  {
+                    "examples": [
+                      {
+                        "sentence": "Diabetes dapat menyebabkan retinopati diabetik yang dapat mengganggu penglihatan"
+                      }
+                    ]
+                  }
+                ],
+                "contentMediaType": "application/json"
+              },
+              "example": {
+                "sentence": "Diabetes dapat menyebabkan retinopati diabetik yang dapat mengganggu penglihatan"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Misc"],
+        "summary": "Get All Predict Result",
+        "operationId": "GetAllPredictResult",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/train": {
+      "post": {
+        "tags": ["Misc"],
+        "summary": "Train Model",
+        "operationId": "TrainModel",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "servers": [
+          {
+            "url": "https://43.218.145.196:5000",
+            "variables": {}
+          }
+        ]
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateSentenceRequest": {
+        "title": "CreateSentenceRequest",
+        "required": ["sentence", "read", "content", "category"],
+        "type": "object",
+        "properties": {
+          "sentence": {
+            "type": "string"
+          },
+          "read": {
+            "type": "integer",
+            "contentEncoding": "int32"
+          },
+          "content": {
+            "type": "integer",
+            "contentEncoding": "int32"
+          },
+          "category": {
+            "type": "integer",
+            "contentEncoding": "int32"
+          }
+        },
+        "examples": [
+          {
+            "sentence": "Read 1 Content 2",
+            "read": 1,
+            "content": 1,
+            "category": 1
+          }
+        ]
+      },
+      "UpdateSentencebyIdRequest": {
+        "title": "UpdateSentencebyIdRequest",
+        "required": ["sentence", "read", "content", "category"],
+        "type": "object",
+        "properties": {
+          "sentence": {
+            "type": "string"
+          },
+          "read": {
+            "type": "integer",
+            "contentEncoding": "int32"
+          },
+          "content": {
+            "type": "integer",
+            "contentEncoding": "int32"
+          },
+          "category": {
+            "type": "integer",
+            "contentEncoding": "int32"
+          }
+        },
+        "examples": [
+          {
+            "sentence": "coba 10",
+            "read": 1,
+            "content": 1,
+            "category": 0
+          }
+        ]
+      },
+      "PredictSentenceRequest": {
+        "title": "PredictSentenceRequest",
+        "required": ["sentence"],
+        "type": "object",
+        "properties": {
+          "sentence": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "sentence": "Diabetes dapat menyebabkan retinopati diabetik yang dapat mengganggu penglihatan"
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Misc",
+      "description": ""
+    }
+  ]
+}
