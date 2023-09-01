@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
@@ -263,9 +263,9 @@ def manage_predicts():
 
         return jsonify({'result': hasil})
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello():
-    return "API Server " + app_name 
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
