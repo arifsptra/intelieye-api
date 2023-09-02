@@ -132,7 +132,7 @@ w2v_h5_model = load_model("model/w2v.h5")
 w2v_bin_model = gensim.models.Word2Vec.load("model/w2v.bin")
 
 def train_model():
-    url = "http://api.intelieye.my.id/sentences"
+    url = "https://api.intelieye.my.id/sentences"
     summary = []
     response = requests.get(url)
     data = response.json()
