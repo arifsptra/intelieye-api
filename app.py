@@ -118,11 +118,10 @@ def get_trained():
     if request.method == 'GET':
         category_no = Trained.query.filter_by(category=0)
         category_yes = Trained.query.filter_by(category=1)
-        return jsonify({
-            'categories':[
-                {'0': [can.sentence for can in category_no]},
-                {'1': [cay.sentence for cay in category_yes]}
-            ],})
+        return jsonify(
+                {'Mitos': [can.sentence for can in category_no]},
+                {'Fakta': [cay.sentence for cay in category_yes]}
+            )
 
 # load all models
 dibaca_h5_model = load_model("model/bisaDibaca.h5")
