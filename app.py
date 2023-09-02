@@ -32,6 +32,11 @@ class Sentences(db.Model):
     content = db.Column(db.Integer, default=2)
     category = db.Column(db.Integer, default=2)
 
+class Trained(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sentence = db.Column(db.String(255))
+    category = db.Column(db.Integer, default=2)
+
 class Predicts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sentence = db.Column(db.String(255))
@@ -100,6 +105,24 @@ def ud_sentences(id):
             return jsonify({'message': 'Sentence deleted successfully'})
         else:
             return jsonify({'message': 'Sentence not found'}), 404
+
+@app.route('/trained', methods=['POST', 'GET'])
+def get_trained():
+    if request.method == 'POST':
+        data = request.json
+        new_sentence = Trained(sentence=data['sentence'], category=data['category'])
+        db.session.add(new_sentence)
+        db.session.commit()
+        return jsonify({'message': 'Sentence trained created successfully'})
+
+    if request.method == 'GET':
+        category_no = Trained.query.filter_by(category=0)
+        category_yes = Trained.query.filter_by(category=1)
+        return jsonify({
+            'categories':[
+                {'0': [can.sentence for can in category_no]},
+                {'1': [cay.sentence for cay in category_yes]}
+            ],})
 
 # load all models
 dibaca_h5_model = load_model("model/bisaDibaca.h5")
