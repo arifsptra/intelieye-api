@@ -145,7 +145,7 @@ def train_model():
             word2vec.save("model/bisaDibaca.bin")
         if i == 1:
             model = build_model_content(input_dim=X_train_avg.shape[1])
-            result = model.fit(X_train_avg, np.array(y_train), epochs=100, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
+            result = model.fit(X_train_avg, np.array(y_train), epochs=45, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
             summary.append({'content' : [result.history['loss'][-1],
                                          result.history['accuracy'][-1],
                                          result.history['val_loss'][-1],
@@ -154,7 +154,7 @@ def train_model():
             word2vec.save("model/temaMata.bin")
         if i == 2:
             model = build_model_category(input_dim=X_train_avg.shape[1])
-            result = model.fit(X_train_avg, np.array(y_train), epochs=200, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
+            result = model.fit(X_train_avg, np.array(y_train), epochs=45, verbose=1, validation_data=(X_test_avg, np.array(y_test)))
             summary.append({'category' : [result.history['loss'][-1],
                                           result.history['accuracy'][-1],
                                           result.history['val_loss'][-1],
@@ -208,12 +208,8 @@ def build_model_category(input_dim):
     return model
 
 def clean_and_lower(text):
-    stopword = ["akan", "dapat", "dan", "dengan", "dari", "itu", "ini", "saya", "kamu", "dia", "mereka", "aku", "di", "ke", "hanya", "dalam", "secara", "ada", "pada"]
     cleaned_text = ''.join(char.lower() for char in text if char.isalnum() or char.isspace())
-    splittedWord = cleaned_text.split() 
-    filtered_words = [word for word in splittedWord if word not in stopword]  
-    filtered_sentence = ' '.join(filtered_words)
-    return filtered_sentence
+    return cleaned_text
 
 def word2vec_model(sentences):
     words = [sentence.split() for sentence in sentences]
@@ -244,7 +240,7 @@ def manage_predicts():
     if request.method == 'GET':
         predicts = Predicts.query.all()
         return jsonify({"data":[{'sentence': c.sentence, 'result': c.result} for c in predicts]})
-    
+
     if request.method == 'POST':
         data = request.json
         user_input = data['sentence']
